@@ -1,0 +1,16 @@
+
+# ignore everything
+*
+
+
+# exclude
+!.gitignore
+
+# source code
+!*.md
+!*.c
+!*.h
+!CMakeLists.txt
+
+!main/
+!components/
