@@ -25,6 +25,20 @@ typedef struct {
 } ASCII_DATA;
 
 
+enum { NULL_TERMINATOR = 0, NULL_TERMINATOR_BYTES = 1 };
+enum { TT_BYTES = 2 };
+typedef struct {
+    uint8_t value[TT_BYTES + NULL_TERMINATOR_BYTES];
+} TalkerIdentifier;
+
+
+enum { SSS_BYTES = 3 };
+typedef struct {
+    uint8_t value[SSS_BYTES + NULL_TERMINATOR_BYTES];
+} SentenceFormater;
+
+
+//--------------------------------------------------
 // Note: sign specifies the hemisphere for Latitude/Longitude
 typedef struct {
     int8_t value;
@@ -110,6 +124,9 @@ typedef struct {
 
 
 //----------------------------------------------------------------------------------------------------
+void parse_talker_identifier(TalkerIdentifier *talker, ASCII_DATA *data);
+void parse_sentence_formater(SentenceFormater *formater, ASCII_DATA *data);
+
 void parse_utc_time(UTC_Time *utc_time, ASCII_DATA *data);
 void parse_av_status(AV_Status *status, ASCII_DATA *data);
 void parse_latitude(Latitude *latitude, ASCII_DATA *data);

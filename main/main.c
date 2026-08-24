@@ -1,6 +1,7 @@
 
-#include <stdio.h>
+#include "gnss.h"
 
 void app_main(){
-    fprintf(stdout, "Start\n");
+    init_urat();
+    rx_task();
 }

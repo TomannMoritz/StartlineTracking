@@ -3,7 +3,7 @@
 #pragma once
 #include "base_types.h"
 
-extern const uint8_t NMEA_RMC_MSG[4];
+extern const char NMEA_RMC_MSG[SSS_BYTES + NULL_TERMINATOR_BYTES];
 
 
 typedef struct {

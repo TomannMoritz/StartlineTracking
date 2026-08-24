@@ -38,6 +38,27 @@ void parse_sign(Sign *sign, ASCII_DATA *data){
 
 
 //--------------------------------------------------
+void parse_talker_identifier(TalkerIdentifier *talker, ASCII_DATA *data){
+    talker->value[0] = data->data[data->offset];
+    talker->value[1] = data->data[data->offset + 1];
+    talker->value[2] = NULL_TERMINATOR;
+
+    data->offset += TT_BYTES;
+}
+
+
+void parse_sentence_formater(SentenceFormater *formater, ASCII_DATA *data){
+
+    formater->value[0] = data->data[data->offset];
+    formater->value[1] = data->data[data->offset + 1];
+    formater->value[2] = data->data[data->offset + 2];
+    formater->value[3] = NULL_TERMINATOR;
+
+    data->offset += SSS_BYTES;
+}
+
+
+//--------------------------------------------------
 void parse_utc_time(UTC_Time *utc_time, ASCII_DATA *data){
     RETURN_EMPTY_FIELD(data);
 

@@ -3,4 +3,6 @@ idf_component_register(
         "main.c"
     INCLUDE_DIRS
         "."
+    PRIV_REQUIRES
+        "gnss"
 )

@@ -1,6 +1,6 @@
 #include "nmea_rmc.h"
 
-const uint8_t NMEA_RMC_MSG[4] = "RMC";
+const char NMEA_RMC_MSG[SSS_BYTES + NULL_TERMINATOR_BYTES] = "RMC";
 
 
 //--------------------------------------------------
