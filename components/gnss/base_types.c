@@ -21,6 +21,116 @@ uint8_t ascii_to_number(uint8_t value){
 }
 
 
+void sign_of_i32(int32_t number, int8_t *sign, uint32_t *value){
+    uint8_t is_positive = number >= 0;
+    *sign = (is_positive) ? 1 : -1;
+
+    *value = (uint32_t)(number * *sign);
+}
+
+
+const uint32_t MIN_IN_DEG = 60;
+const uint32_t SEC_IN_MIN = 60;
+const uint32_t MIL_IN_SEC = 1000;
+
+const uint32_t DEG_SCALE = MIN_IN_DEG * SEC_IN_MIN * MIL_IN_SEC;
+const uint32_t MIN_SCALE = SEC_IN_MIN * MIL_IN_SEC;
+const uint32_t SEC_SCALE = MIL_IN_SEC;
+
+
+int32_t geographical_position_to_number(GeographicalPosition *position){
+    int32_t result = 0
+        + position->degrees * DEG_SCALE
+        + position->minutes * MIN_SCALE
+        + position->seconds * SEC_SCALE
+        + position->miliseconds;
+
+    return result * position->sign;
+}
+
+
+GeographicalPosition number_to_geographical_position(int32_t number){
+    int8_t sign;
+    uint32_t value;
+    sign_of_i32(number, &sign, &value);
+
+    uint8_t deg =  (value - 0) / (DEG_SCALE);
+    uint8_t min =  (value - deg * DEG_SCALE) / (MIN_SCALE);
+    uint8_t sec =  (value - deg * DEG_SCALE - min * MIN_SCALE) / (SEC_SCALE);
+    uint32_t mil = (value - deg * DEG_SCALE - min * MIN_SCALE - sec * SEC_SCALE);
+
+    GeographicalPosition position = {
+        .is_valid = TRUE,
+        .sign = sign,
+        .degrees = deg,
+        .minutes = min,
+        .seconds = sec,
+        .miliseconds = mil
+    };
+
+    return position;
+}
+
+
+Latitude number_to_latitude(int32_t number){
+    GeographicalPosition position = number_to_geographical_position(number);
+
+    Latitude latitude = {
+        .is_valid = position.is_valid,
+        .sign.value = position.sign,
+        .degrees = position.degrees,
+        .minutes = position.minutes,
+        .seconds = position.seconds,
+        .miliseconds = position.miliseconds
+    };
+
+    return latitude;
+}
+
+
+Longitude number_to_longitude(int32_t number){
+    GeographicalPosition position = number_to_geographical_position(number);
+
+    Longitude longitude = {
+        .is_valid = position.is_valid,
+        .sign.value = position.sign,
+        .degrees = position.degrees,
+        .minutes = position.minutes,
+        .seconds = position.seconds,
+        .miliseconds = position.miliseconds
+    };
+
+    return longitude;
+}
+
+
+uint32_t latitude_to_number(Latitude *latitude){
+    GeographicalPosition position = {
+        .sign = latitude->sign.value,
+        .degrees = latitude->degrees,
+        .minutes = latitude->minutes,
+        .seconds = latitude->seconds,
+        .miliseconds = latitude->miliseconds
+    };
+
+    return geographical_position_to_number(&position);
+}
+
+
+uint32_t longitude_to_number(Longitude *longitude){
+    GeographicalPosition position = {
+        .sign = longitude->sign.value,
+        .degrees = longitude->degrees,
+        .minutes = longitude->minutes,
+        .seconds = longitude->seconds,
+        .miliseconds = longitude->miliseconds
+    };
+
+    return geographical_position_to_number(&position);
+}
+
+
+//--------------------------------------------------
 void parse_sign(Sign *sign, ASCII_DATA *data){
     uint8_t value = data->data[data->offset];
     if (value == NORTH_CHAR || value == EAST_CHAR){

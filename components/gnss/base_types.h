@@ -27,6 +27,17 @@ typedef struct {
 } ASCII_DATA;
 
 
+typedef struct {
+    uint8_t is_valid;
+    int8_t sign;
+    uint8_t degrees;
+    uint8_t minutes;
+    uint8_t seconds;
+    uint32_t miliseconds;
+} GeographicalPosition;
+
+
+//--------------------------------------------------
 enum { NULL_TERMINATOR = 0, NULL_TERMINATOR_BYTES = 1 };
 enum { TT_BYTES = 2 };
 typedef struct {
@@ -135,6 +146,11 @@ typedef struct {
 
 
 //----------------------------------------------------------------------------------------------------
+Latitude number_to_latitude(int32_t number);
+Longitude number_to_longitude(int32_t number);
+uint32_t latitude_to_number(Latitude *latitude);
+uint32_t longitude_to_number(Longitude *longitude);
+
 void parse_talker_identifier(TalkerIdentifier *talker, ASCII_DATA *data);
 void parse_sentence_formater(SentenceFormater *formater, ASCII_DATA *data);
 
