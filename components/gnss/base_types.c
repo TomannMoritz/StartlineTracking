@@ -85,6 +85,7 @@ void parse_utc_time(UTC_Time *utc_time, ASCII_DATA *data){
     utc_time->miliseconds += ascii_to_number(data->data[data->offset]);
     data->offset++;
 
+    utc_time->is_valid = TRUE;
     data->offset++;
 }
 
@@ -95,6 +96,7 @@ void parse_av_status(AV_Status *status, ASCII_DATA *data){
     status->value = data->data[data->offset];
     data->offset++;
 
+    status->is_valid = TRUE;
     data->offset++;
 }
 
@@ -129,6 +131,7 @@ void parse_latitude(Latitude *latitude, ASCII_DATA *data){
     latitude->miliseconds += ascii_to_number(data->data[data->offset]);
     data->offset++;
 
+    latitude->is_valid = TRUE;
     data->offset++;
 
     // parse NORTH/SOUTH sign/hemisphere
@@ -167,6 +170,7 @@ void parse_longitude(Longitude *longitude, ASCII_DATA *data){
     longitude->miliseconds += ascii_to_number(data->data[data->offset]);
     data->offset++;
 
+    longitude->is_valid = TRUE;
     data->offset++;
 
     // parse EAST/WEST sign/hemisphere
@@ -191,6 +195,7 @@ void parse_speed_knots(Speed_Knots *speed, ASCII_DATA *data){
     speed->decimal_value += ascii_to_number(data->data[data->offset]);
     data->offset++;
 
+    speed->is_valid = TRUE;
     data->offset++;
 }
 
@@ -211,6 +216,7 @@ void parse_track_angle(TrackAngle *angle, ASCII_DATA *data){
     angle->integer_value += ascii_to_number(data->data[data->offset]);
     data->offset++;
 
+    angle->is_valid = TRUE;
     data->offset++;
 }
 
@@ -233,6 +239,7 @@ void parse_nmea_date(NMEA_Date *date, ASCII_DATA *data){
     date->year += ascii_to_number(data->data[data->offset]);
     data->offset++;
 
+    date->is_valid = TRUE;
     data->offset++;
 }
 
@@ -254,6 +261,7 @@ void parse_position_mode(PosMode *mode, ASCII_DATA *data){
     mode->value = data->data[data->offset];
     data->offset++;
 
+    mode->is_valid = TRUE;
     data->offset++;
 }
 
@@ -264,6 +272,7 @@ void parse_nav_status(NavStatus *nav_status, ASCII_DATA *data){
     nav_status->value = data->data[data->offset];
     data->offset++;
 
+    nav_status->is_valid = TRUE;
     data->offset++;
 }
 
@@ -272,6 +281,7 @@ void parse_nav_status(NavStatus *nav_status, ASCII_DATA *data){
 // Logging
 //--------------------------------------------------
 void log_utc_time(FILE *log_fd, UTC_Time *time){
+    LOG_VALUE_u8(log_fd, time->is_valid);
     LOG_VALUE_u8(log_fd, time->hours);
     LOG_VALUE_u8(log_fd, time->minutes);
     LOG_VALUE_u8(log_fd, time->seconds);
@@ -279,10 +289,12 @@ void log_utc_time(FILE *log_fd, UTC_Time *time){
 }
 
 void log_av_status(FILE *log_fd, AV_Status *status){
+    LOG_VALUE_u8(log_fd, status->is_valid);
     LOG_VALUE_ASCII(log_fd, status->value);
 }
 
 void log_latitude(FILE *log_fd, Latitude *latitude){
+    LOG_VALUE_u8(log_fd, latitude->is_valid);
     LOG_VALUE_u8(log_fd, latitude->sign.value);
     LOG_VALUE_u8(log_fd, latitude->degrees);
     LOG_VALUE_u8(log_fd, latitude->minutes);
@@ -291,6 +303,7 @@ void log_latitude(FILE *log_fd, Latitude *latitude){
 }
 
 void log_longitude(FILE *log_fd, Longitude *longitude){
+    LOG_VALUE_u8(log_fd, longitude->is_valid);
     LOG_VALUE_u8(log_fd, longitude->sign.value);
     LOG_VALUE_u8(log_fd, longitude->degrees);
     LOG_VALUE_u8(log_fd, longitude->minutes);
@@ -299,26 +312,31 @@ void log_longitude(FILE *log_fd, Longitude *longitude){
 }
 
 void log_speed_knots(FILE *log_fd, Speed_Knots *speed){
+    LOG_VALUE_u8(log_fd, speed->is_valid);
     LOG_VALUE_u8(log_fd, speed->integer_value);
     LOG_VALUE_u32(log_fd, speed->decimal_value);
 }
 
 void log_track_angle(FILE *log_fd, TrackAngle *angle){
+    LOG_VALUE_u8(log_fd, angle->is_valid);
     LOG_VALUE_u8(log_fd, angle->integer_value);
     LOG_VALUE_u8(log_fd, angle->decimal_value);
 }
 
 void log_nmea_date(FILE *log_fd, NMEA_Date *date){
+    LOG_VALUE_u8(log_fd, date->is_valid);
     LOG_VALUE_u8(log_fd, date->day);
     LOG_VALUE_u8(log_fd, date->month);
     LOG_VALUE_u8(log_fd, date->year);
 }
 
 void log_position_mode(FILE *log_fd, PosMode *pos_mode){
+    LOG_VALUE_u8(log_fd, pos_mode->is_valid);
     LOG_VALUE_ASCII(log_fd, pos_mode->value);
 }
 
 void log_nav_status(FILE *log_fd, NavStatus *nav_status){
+    LOG_VALUE_u8(log_fd, nav_status->is_valid);
     LOG_VALUE_ASCII(log_fd, nav_status->value);
 }
 

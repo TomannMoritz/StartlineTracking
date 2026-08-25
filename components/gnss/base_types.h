@@ -17,6 +17,8 @@ extern const uint8_t ASCII_SEPARATOR;
 extern const uint8_t ASCII_ZERO;
 extern const uint8_t BASE_10;
 
+enum { FALSE = 0, TRUE = 1 };
+
 
 //--------------------------------------------------
 typedef struct {
@@ -47,6 +49,7 @@ typedef struct {
 
 //--------------------------------------------------
 typedef struct {
+    uint8_t is_valid;
     uint8_t hours;
     uint8_t minutes;
     uint8_t seconds;
@@ -57,6 +60,7 @@ typedef struct {
 extern const uint8_t ACTIVE_STATUS;
 extern const uint8_t VOID_STATUS;
 typedef struct {
+    uint8_t is_valid;
     uint8_t value;
 } AV_Status;
 
@@ -67,6 +71,7 @@ typedef struct {
 extern const int8_t NORTH_CHAR;
 extern const int8_t SOUTH_CHAR;
 typedef struct {
+    uint8_t is_valid;
     Sign sign;
     uint8_t degrees;
     uint8_t minutes;
@@ -81,6 +86,7 @@ typedef struct {
 extern const int8_t EAST_CHAR;
 extern const int8_t WEST_CHAR;
 typedef struct {
+    uint8_t is_valid;
     Sign sign;
     uint8_t degrees;
     uint8_t minutes;
@@ -90,18 +96,21 @@ typedef struct {
 
 
 typedef struct {
+    uint8_t is_valid;
     uint8_t integer_value;
     uint32_t decimal_value;
 } Speed_Knots;
 
 
 typedef struct {
+    uint8_t is_valid;
     uint8_t integer_value;
     uint8_t decimal_value;
 } TrackAngle;
 
 
 typedef struct {
+    uint8_t is_valid;
     uint8_t day;
     uint8_t month;
     uint8_t year;
@@ -114,11 +123,13 @@ typedef struct {
 
 
 typedef struct {
+    uint8_t is_valid;
     uint8_t value;
 } PosMode;
 
 
 typedef struct {
+    uint8_t is_valid;
     uint8_t value;
 } NavStatus;
 
