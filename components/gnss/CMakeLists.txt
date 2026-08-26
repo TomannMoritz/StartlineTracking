@@ -3,6 +3,7 @@ idf_component_register(
         "gnss.c"
         "nmea_rmc.c"
         "base_types.c"
+        "ring_buffer.c"
     INCLUDE_DIRS
         "."
     REQUIRES
