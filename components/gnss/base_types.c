@@ -14,6 +14,8 @@ const int8_t SOUTH_CHAR = 'S';
 const int8_t EAST_CHAR = 'E';
 const int8_t WEST_CHAR = 'W';
 
+const uint8_t MAX_DEG = 180;
+
 
 //--------------------------------------------------
 uint8_t ascii_to_number(uint8_t value){

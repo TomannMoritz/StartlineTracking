@@ -1,6 +1,6 @@
 
 #pragma once
-#include "gnss.h"
+#include "base_types.h"
 
 //--------------------------------------------------
 typedef struct {
@@ -19,6 +19,9 @@ typedef struct {
 
 
 //--------------------------------------------------
+// Note: DEG_SCALE * MAX_DEG is the largest possible GeographicalPosition (Latitude/Longitude) value
+#define RING_BUFFER_MAX_AVG_ELEMENTS_I64 (INT64_MAX / (DEG_SCALE * MAX_DEG))
+
 enum { RING_BUFFER_SIZE = 16 };
 typedef struct {
     TrackingData tracking_data[RING_BUFFER_SIZE];
@@ -27,8 +30,15 @@ typedef struct {
 
 
 //--------------------------------------------------
+extern RingBuffer tracking_ring_buffer;
+
+
+//--------------------------------------------------
 void create_coordinate(Coordinate *coordinate, Latitude *latitude, Longitude *longitude);
 void ring_buffer_insert(RingBuffer *ring_buffer, TrackingData *track_data);
+
+Coordinate get_average_coordinate(RingBuffer *ring_buffer, uint32_t length);
+void calculate_average_tracking_data(RingBuffer *ring_buffer, uint32_t length, TrackingData *tracking_data);
 
 
 //--------------------------------------------------

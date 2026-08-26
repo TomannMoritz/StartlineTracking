@@ -18,6 +18,8 @@ extern const uint8_t ASCII_ZERO;
 extern const uint8_t BASE_10;
 
 enum { FALSE = 0, TRUE = 1 };
+extern const uint32_t DEG_SCALE;
+extern const uint8_t MAX_DEG;
 
 
 //--------------------------------------------------
