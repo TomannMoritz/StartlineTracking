@@ -3,6 +3,8 @@
 #include <string.h>
 
 #include "gnss.h"
+#include "nmea_rmc.h"
+#include "ring_buffer.h"
 
 
 const char *TAG_GNSS = "[GNSS]";
@@ -13,8 +15,8 @@ const uint32_t TX_BUFFER_SIZE = 0;
 const uint32_t QUEUE_SIZE = 0;
 
 const int8_t UART_NUM = UART_NUM_1;
-const uint8_t UART_TXD = 1;
-const uint8_t UART_RXD = 2;
+const uint8_t GPIO_GNSS_UART_TXD = 1;
+const uint8_t GPIO_GNSS_UART_RXD = 2;
 
 
 //--------------------------------------------------
@@ -33,7 +35,7 @@ void init_gnss_urat(void){
     };
 
     uart_param_config(UART_NUM, &uart_config);
-    uart_set_pin(UART_NUM, UART_TXD, UART_RXD, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+    uart_set_pin(UART_NUM, GPIO_GNSS_UART_TXD, GPIO_GNSS_UART_RXD, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
 }
 
 
@@ -87,6 +89,12 @@ void parse_data(ASCII_DATA *data, int length){
         NMEA_RMC rmc = {};
         parse_nmea_rmc(&rmc, data);
         log_nmea_rmc(stdout, &rmc);
+
+        Coordinate coordinate = {};
+        create_coordinate(&coordinate, &rmc.latitude, &rmc.longitude);
+        TrackingData tracking_data = {.utc_time = rmc.utc_time, .coordinate = coordinate, .speed = rmc.speed, .angle = rmc.angle};
+
+        ring_buffer_insert(&tracking_ring_buffer, &tracking_data);
     }
 }
 

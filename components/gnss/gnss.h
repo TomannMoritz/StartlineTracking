@@ -1,7 +1,6 @@
 #pragma once
 #include <esp_log.h>
 
-#include "nmea_rmc.h"
 #include "base_types.h"
 
 
