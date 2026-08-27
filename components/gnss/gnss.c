@@ -18,7 +18,7 @@ const uint8_t UART_RXD = 2;
 
 
 //--------------------------------------------------
-void init_urat(void){
+void init_gnss_urat(void){
     ESP_LOGI(TAG_GNSS, "Install UART Driver");
     uart_driver_install(UART_NUM, RX_BUFFER_SIZE, TX_BUFFER_SIZE, QUEUE_SIZE, NULL, 0);
 
@@ -38,7 +38,7 @@ void init_urat(void){
 
 
 //--------------------------------------------------
-void rx_task(){
+void gnss_rx_task(void *arg){
     ESP_LOGI(TAG_GNSS, "Start UART RX Task");
     uint8_t data[RX_BUFFER_SIZE + NULL_TERMINATOR_BYTES];
 
