@@ -10,8 +10,6 @@ StartingLine starting_line = {};
 const uint8_t GPIO_COMMITTEE_BOAT = 5;
 const uint8_t GPIO_PIN_END = 6;
 
-const uint32_t BUTTON_IDLE_DELAY = 30;
-const uint32_t BUTTON_PRESSED_DELAY = 500;
 
 const uint8_t NUM_AVG_ELEMENTS = 4;
 
