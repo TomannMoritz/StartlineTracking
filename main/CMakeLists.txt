@@ -3,6 +3,7 @@ idf_component_register(
         "main.c"
         "starting_line.c"
         "base_button.c"
+        "countdown.c"
     INCLUDE_DIRS
         "."
     REQUIRES
