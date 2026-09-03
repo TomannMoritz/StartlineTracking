@@ -9,6 +9,9 @@ typedef struct {
     TickType_t previous_tick;
 } CountdownTimer;
 
+extern CountdownTimer countdown_timer;
+
+
 //--------------------------------------------------
 void init_countdown(void);
 

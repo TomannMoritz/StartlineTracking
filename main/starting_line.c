@@ -4,18 +4,17 @@
 #include "base_button.h"
 
 
+static const char TAG_STARTINGLINE[] = "[Startingline]";
+static const char TAG_COMMITTEE_BOAT[] = "(Committee Boat)";
+static const char TAG_PIN_END[] = "(Pin End)";
+
 const Coordinate RESET_COORDINATE = {};
 StartingLine starting_line = {};
 
-const uint8_t GPIO_COMMITTEE_BOAT = 5;
-const uint8_t GPIO_PIN_END = 6;
-
+const uint8_t GPIO_COMMITTEE_BOAT = 7;
+const uint8_t GPIO_PIN_END = 8;
 
 const uint8_t NUM_AVG_ELEMENTS = 4;
-
-const char TAG_STARTINGLINE[] = "[Startingline]";
-const char TAG_COMMITTEE_BOAT[] = "(Committee Boat)";
-const char TAG_PIN_END[] = "(Pin End)";
 
 
 //--------------------------------------------------

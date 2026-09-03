@@ -14,10 +14,10 @@ static const int32_t COUNTDOWN_TIMER_SEC = -3 * SEC_A_MIN;
 static const uint32_t COUNTDOWN_TIMER_RUNNING_DELAY = 100;
 static const uint32_t COUNTDOWN_TIMER_STOP_DELAY = 100;
 
-const uint8_t GPIO_COUNTDOWN_START_STOP = 7;
-const uint8_t GPIO_COUNTDOWN_SYNC_CLEAR = 8;
-const uint8_t GPIO_COUNTDOWN_ADD_MIN = 9;
-const uint8_t GPIO_COUNTDOWN_SUB_MIN = 10;
+const uint8_t GPIO_COUNTDOWN_START_STOP = 3;
+const uint8_t GPIO_COUNTDOWN_SYNC_CLEAR = 4;
+const uint8_t GPIO_COUNTDOWN_ADD_MIN = 5;
+const uint8_t GPIO_COUNTDOWN_SUB_MIN = 6;
 
 static const char TAG_COUNTDOWN[] = "[Countdown Timer]";
 static const char TAG_COUNTDOWN_START_STOP[] = "(START/STOP)";
