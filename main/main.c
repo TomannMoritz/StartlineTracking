@@ -4,6 +4,7 @@
 #include "gnss.h"
 #include "starting_line.h"
 #include "countdown.h"
+#include "ui.h"
 
 #define STACK_DEPTH (1024 * 4)
 
@@ -12,6 +13,7 @@ void init(){
     init_gnss_urat();
     init_starting_line();
     init_countdown();
+    init_display();
 }
 
 
@@ -21,6 +23,7 @@ void start_tasks(){
     xTaskCreate(set_pin_end_task, "Pin End", STACK_DEPTH, NULL, configMAX_PRIORITIES - 1, NULL);
 
     start_countdown();
+    xTaskCreate(display_task, "Display", STACK_DEPTH, NULL, configMAX_PRIORITIES - 1, NULL);
 }
 
 

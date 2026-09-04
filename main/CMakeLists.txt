@@ -4,10 +4,12 @@ idf_component_register(
         "starting_line.c"
         "base_button.c"
         "countdown.c"
+        "ui.c"
     INCLUDE_DIRS
         "."
     REQUIRES
         esp_driver_gpio
     PRIV_REQUIRES
         "gnss"
+        "display"
 )
