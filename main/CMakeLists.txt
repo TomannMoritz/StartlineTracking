@@ -5,6 +5,7 @@ idf_component_register(
         "base_button.c"
         "countdown.c"
         "ui.c"
+        "gps_util.c"
     INCLUDE_DIRS
         "."
     REQUIRES
