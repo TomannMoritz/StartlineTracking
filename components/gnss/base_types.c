@@ -106,7 +106,7 @@ Longitude number_to_longitude(int32_t number){
 }
 
 
-uint32_t latitude_to_number(Latitude *latitude){
+int32_t latitude_to_number(Latitude *latitude){
     GeographicalPosition position = {
         .sign = latitude->sign.value,
         .degrees = latitude->degrees,
@@ -119,7 +119,7 @@ uint32_t latitude_to_number(Latitude *latitude){
 }
 
 
-uint32_t longitude_to_number(Longitude *longitude){
+int32_t longitude_to_number(Longitude *longitude){
     GeographicalPosition position = {
         .sign = longitude->sign.value,
         .degrees = longitude->degrees,

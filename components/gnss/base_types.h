@@ -152,8 +152,8 @@ void sign_of_i32(int32_t number, int8_t *sign, uint32_t *value);
 
 Latitude number_to_latitude(int32_t number);
 Longitude number_to_longitude(int32_t number);
-uint32_t latitude_to_number(Latitude *latitude);
-uint32_t longitude_to_number(Longitude *longitude);
+int32_t latitude_to_number(Latitude *latitude);
+int32_t longitude_to_number(Longitude *longitude);
 
 void parse_talker_identifier(TalkerIdentifier *talker, ASCII_DATA *data);
 void parse_sentence_formater(SentenceFormater *formater, ASCII_DATA *data);
