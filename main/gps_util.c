@@ -1,11 +1,10 @@
 #include "math.h"
 
 #include "gps_util.h"
+#include "constants.h"
 
 
 const uint32_t RADIUS_EARTH_KM = 6371;
-const double PI = 3.14159265359;
-const double DEG_HALF_CIRCLE = 180.0;
 
 
 //--------------------------------------------------

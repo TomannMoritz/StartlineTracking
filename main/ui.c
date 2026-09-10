@@ -5,14 +5,13 @@
 
 #include "countdown.h"
 #include "ring_buffer.h"
+#include "gps_util.h"
+
+#include "constants.h"
 
 
 static const char *TAG_UI = "[UI]";
 const uint32_t DISPLAY_DELY = 10;
-
-const uint32_t BASE_10_000 = 10000;
-const uint32_t BASE_1000 = 1000;
-const uint32_t BASE_100 = 100;
 
 
 //--------------------------------------------------

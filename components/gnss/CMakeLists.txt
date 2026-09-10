@@ -8,5 +8,7 @@ idf_component_register(
         "."
     REQUIRES
         esp_driver_uart
+    PRIV_REQUIRES
+        "util"
     )
 
