@@ -25,3 +25,8 @@ float vector2_to_radiant(Vector2 vector);
 Vector2 compass_to_vector2(float compass);
 float vector2_to_compass(Vector2 vector);
 
+
+//--------------------------------------------------
+void scale_vector2(Vector2 *vector, float scalar);
+void add_vector2(Vector2 *result, Vector2 *addition);
+float vector2_length(Vector2 *vector);

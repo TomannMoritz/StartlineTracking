@@ -62,3 +62,22 @@ float vector2_to_compass(Vector2 vector){
     float compass = degree_to_compass(degree);
     return compass;
 }
+
+
+//--------------------------------------------------
+void scale_vector2(Vector2 *vector, float scalar){
+    vector->x *= scalar;
+    vector->y *= scalar;
+}
+
+
+void add_vector2(Vector2 *result, Vector2 *addition){
+    result->x += addition->x;
+    result->y += addition->y;
+}
+
+
+float vector2_length(Vector2 *vector){
+    float quadratic_length = vector->x * vector->x + vector->y * vector->y;
+    return sqrt(quadratic_length);
+}

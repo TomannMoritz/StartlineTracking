@@ -52,6 +52,7 @@ void create_speed_angle(SpeedAngle *speed_angle, SpeedKnots *speed, TrackAngle *
 void ring_buffer_insert(RingBuffer *ring_buffer, TrackingData *track_data);
 
 Coordinate get_average_coordinate(RingBuffer *ring_buffer, uint32_t length);
+SpeedAngle get_average_speed_angle(RingBuffer *ring_buffer, uint32_t length);
 void calculate_average_tracking_data(RingBuffer *ring_buffer, uint32_t length, TrackingData *tracking_data);
 
 

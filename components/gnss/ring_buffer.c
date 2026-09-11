@@ -1,4 +1,9 @@
+#include <math.h>
+
 #include "ring_buffer.h"
+
+#include "vector.h"
+#include "constants.h"
 
 RingBuffer tracking_ring_buffer;
 
@@ -32,14 +37,14 @@ void ring_buffer_insert(RingBuffer *ring_buffer, TrackingData *tracking_data){
 
 //--------------------------------------------------
 Coordinate get_average_coordinate(RingBuffer *ring_buffer, uint32_t length){
-    Coordinate avg_coordinate = {};
-    if (length > RING_BUFFER_SIZE){ return avg_coordinate; }
+    Coordinate invalid_coordinate = {};
+    if (length > RING_BUFFER_SIZE){ return invalid_coordinate; }
     // Note: with i64 it is unlikely to exceed the max number of elements
-    if (length > RING_BUFFER_MAX_AVG_ELEMENTS_I64){ return avg_coordinate; }
+    if (length > RING_BUFFER_MAX_AVG_ELEMENTS_I64){ return invalid_coordinate; }
 
     int64_t latitude_value = 0;
     int64_t longitude_value = 0;
-    uint32_t counter_coordinate = 0;
+    uint32_t counter_valid = 0;
 
     for (size_t i = 0; i < length; i++){
         uint32_t position = (ring_buffer->start_position + i) % RING_BUFFER_SIZE;
@@ -49,19 +54,67 @@ Coordinate get_average_coordinate(RingBuffer *ring_buffer, uint32_t length){
 
         latitude_value += (int64_t)latitude_to_number(&coordinate.latitude);
         longitude_value += (int64_t)longitude_to_number(&coordinate.longitude);
-        counter_coordinate++;
+        counter_valid++;
     }
 
-    if (counter_coordinate == 0){ return avg_coordinate; }
+    if (counter_valid == 0){ return invalid_coordinate; }
 
-    latitude_value /= counter_coordinate;
-    longitude_value /= counter_coordinate;
+    latitude_value /= counter_valid;
+    longitude_value /= counter_valid;
 
-    avg_coordinate.is_valid = TRUE;
-    avg_coordinate.latitude = number_to_latitude((int32_t)latitude_value);
-    avg_coordinate.longitude = number_to_longitude((int32_t)longitude_value);
-
+    Coordinate avg_coordinate = {
+        .is_valid = TRUE,
+        .latitude = number_to_latitude((int32_t)latitude_value),
+        .longitude = number_to_longitude((int32_t)longitude_value)
+    };
     return avg_coordinate;
+}
+
+
+SpeedAngle get_average_speed_angle(RingBuffer *ring_buffer, uint32_t length){
+    SpeedAngle invalid_speed_angle = {};
+    if (length > RING_BUFFER_SIZE){ return invalid_speed_angle; }
+    // Note: with i64 it is unlikely to exceed the max number of elements
+    if (length > RING_BUFFER_MAX_AVG_ELEMENTS_I64){ return invalid_speed_angle; }
+
+    uint32_t counter_valid = 0;
+    Vector2 vector = {};
+
+    for (size_t i = 0; i < length; i++){
+        uint32_t position = (ring_buffer->start_position + i) % RING_BUFFER_SIZE;
+
+        TrackingData curr_data = ring_buffer->tracking_data[position];
+        if (curr_data.speed_angle.is_valid == FALSE){ continue; }
+
+        // add direction vectors (scaled by speed) to calculate average over both parameters
+        float compass_deg = curr_data.speed_angle.angle.value;
+        float speed_value = curr_data.speed_angle.speed.value;
+
+        Vector2 curr_vector = compass_to_vector2(compass_deg);
+        scale_vector2(&curr_vector, speed_value);
+        add_vector2(&vector, &curr_vector);
+
+        counter_valid++;
+    }
+
+    if (counter_valid == 0){ return invalid_speed_angle; }
+
+    Vector2 avg_vector = vector;
+    scale_vector2(&avg_vector, 1.0 / counter_valid);
+
+    float avg_speed = vector2_length(&avg_vector);
+    scale_vector2(&avg_vector, 1.0 / avg_speed);
+
+    float avg_compass = vector2_to_compass(avg_vector);
+
+    SpeedAngle avg_speed_angle = {
+        .is_valid = TRUE,
+        .angle.is_valid = TRUE,
+        .angle.value = avg_compass,
+        .speed.is_valid = TRUE,
+        .speed.value = avg_speed
+    };
+    return avg_speed_angle;
 }
 
 
@@ -74,8 +127,7 @@ void calculate_average_tracking_data(RingBuffer *ring_buffer, uint32_t length, T
     tracking_data->utc_time = ring_buffer->tracking_data[position].utc_time;
 
     tracking_data->coordinate = get_average_coordinate(ring_buffer, length);
-
-    // TODO: calculate speed & angle average
+    tracking_data->speed_angle = get_average_speed_angle(ring_buffer, length);
 }
 
 
