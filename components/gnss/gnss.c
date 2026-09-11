@@ -91,8 +91,10 @@ void parse_data(ASCII_DATA *data, int length){
         log_nmea_rmc(stdout, &rmc);
 
         Coordinate coordinate = {};
+        SpeedAngle speed_angle = {};
         create_coordinate(&coordinate, &rmc.latitude, &rmc.longitude);
-        TrackingData tracking_data = {.utc_time = rmc.utc_time, .coordinate = coordinate, .speed = rmc.speed, .angle = rmc.angle};
+        create_speed_angle(&speed_angle, &rmc.speed, &rmc.angle);
+        TrackingData tracking_data = {.utc_time = rmc.utc_time, .coordinate = coordinate, .speed_angle = speed_angle};
 
         ring_buffer_insert(&tracking_ring_buffer, &tracking_data);
     }

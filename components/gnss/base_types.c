@@ -283,20 +283,20 @@ void parse_longitude(Longitude *longitude, ASCII_DATA *data){
 }
 
 
-void parse_speed_knots(Speed_Knots *speed, ASCII_DATA *data){
+void parse_speed_knots(SpeedKnots *speed, ASCII_DATA *data){
     RETURN_EMPTY_FIELD(data);
 
-    speed->decimal_value = ascii_to_number(data->data[data->offset]);
+    speed->value = ascii_to_number(data->data[data->offset]);
     data->offset++;
 
     // separator at position 1
     data->offset++;
 
-    speed->decimal_value = ascii_to_number(data->data[data->offset]) * BASE_10 * BASE_10;
+    speed->value += ascii_to_number(data->data[data->offset]) / (float)BASE_10;
     data->offset++;
-    speed->decimal_value += ascii_to_number(data->data[data->offset]) * BASE_10;
+    speed->value += ascii_to_number(data->data[data->offset]) / (float)BASE_100;
     data->offset++;
-    speed->decimal_value += ascii_to_number(data->data[data->offset]);
+    speed->value += ascii_to_number(data->data[data->offset]) / (float)BASE_1000;
     data->offset++;
 
     speed->is_valid = TRUE;
@@ -307,17 +307,17 @@ void parse_speed_knots(Speed_Knots *speed, ASCII_DATA *data){
 void parse_track_angle(TrackAngle *angle, ASCII_DATA *data){
     RETURN_EMPTY_FIELD(data);
 
-    angle->integer_value = ascii_to_number(data->data[data->offset]) * BASE_10;
+    angle->value = ascii_to_number(data->data[data->offset]) * BASE_10;
     data->offset++;
-    angle->integer_value += ascii_to_number(data->data[data->offset]);
+    angle->value += ascii_to_number(data->data[data->offset]);
     data->offset++;
 
     // separator at position 2
     data->offset++;
 
-    angle->integer_value = ascii_to_number(data->data[data->offset]) * BASE_10;
+    angle->value += ascii_to_number(data->data[data->offset]) / (float)BASE_10;
     data->offset++;
-    angle->integer_value += ascii_to_number(data->data[data->offset]);
+    angle->value += ascii_to_number(data->data[data->offset]) / (float)BASE_100;
     data->offset++;
 
     angle->is_valid = TRUE;
@@ -415,16 +415,14 @@ void log_longitude(FILE *log_fd, Longitude *longitude){
     LOG_VALUE_u32(log_fd, longitude->miliseconds);
 }
 
-void log_speed_knots(FILE *log_fd, Speed_Knots *speed){
+void log_speed_knots(FILE *log_fd, SpeedKnots *speed){
     LOG_VALUE_u8(log_fd, speed->is_valid);
-    LOG_VALUE_u8(log_fd, speed->integer_value);
-    LOG_VALUE_u32(log_fd, speed->decimal_value);
+    LOG_VALUE_f(log_fd, speed->value);
 }
 
 void log_track_angle(FILE *log_fd, TrackAngle *angle){
     LOG_VALUE_u8(log_fd, angle->is_valid);
-    LOG_VALUE_u8(log_fd, angle->integer_value);
-    LOG_VALUE_u8(log_fd, angle->decimal_value);
+    LOG_VALUE_f(log_fd, angle->value);
 }
 
 void log_nmea_date(FILE *log_fd, NMEA_Date *date){

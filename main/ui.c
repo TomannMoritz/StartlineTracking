@@ -65,17 +65,19 @@ void set_countdown(CountdownTimer *countdown, char *buffer){
 
 
 const uint8_t SPEED_INFO_LEN = 7;
-void set_speed(Speed_Knots *speed, char *buffer){
+void set_speed(SpeedKnots *speed, char *buffer){
     if (speed->is_valid == FALSE){
         sprintf(buffer, "--.--kn");
         return;
     }
 
+    int integer_value = (int)speed->value;
+    int decimal_value = (int)speed->value * BASE_100 % BASE_100;
     sprintf(buffer, "%d%d.%d%dkn",
-            (int)(speed->integer_value / BASE_10 % BASE_10),
-            (int)(speed->integer_value % BASE_10),
-            (int)(speed->decimal_value / BASE_10_000 % BASE_10),
-            (int)(speed->decimal_value % BASE_10_000 / BASE_1000 % BASE_10));
+            (int)(integer_value / BASE_10 % BASE_10),
+            (int)(integer_value % BASE_10),
+            (int)(decimal_value / BASE_10_000 % BASE_10),
+            (int)(decimal_value % BASE_10_000 / BASE_1000 % BASE_10));
 }
 
 
@@ -86,12 +88,14 @@ void set_angle(TrackAngle *angle, char *buffer){
         return;
     }
 
+    int integer_value = (int)angle->value;
+    int decimal_value = (int)angle->value * BASE_100 % BASE_100;
     sprintf(buffer, "%d%d%d.%d%dDeg",
-            (int)(angle->integer_value / BASE_100 % BASE_10),
-            (int)(angle->integer_value / BASE_10 % BASE_10),
-            (int)(angle->integer_value % BASE_10),
-            (int)(angle->decimal_value / BASE_10 % BASE_10),
-            (int)(angle->decimal_value % BASE_10));
+            (int)(integer_value / BASE_100 % BASE_10),
+            (int)(integer_value / BASE_10 % BASE_10),
+            (int)(integer_value % BASE_10),
+            (int)(decimal_value / BASE_10 % BASE_10),
+            (int)(decimal_value % BASE_10));
 }
 
 
@@ -122,12 +126,12 @@ void display_task(void *){
 
         // Speed
         char speed_buffer[SPEED_INFO_LEN + NULL_TERMINATOR_BYTES];
-        set_speed(&curr_data.speed, speed_buffer);
+        set_speed(&curr_data.speed_angle.speed, speed_buffer);
         display_text(speed_buffer, SCREEN_WIDTH / 2 - (SPEED_INFO_LEN * font_big.font_width) / 2, SCREEN_HEIGHT / 2, &font_big, "Speed");
 
         // Angle
         char angle_buffer[ANGLE_INFO_LEN + NULL_TERMINATOR_BYTES];
-        set_angle(&curr_data.angle, angle_buffer);
+        set_angle(&curr_data.speed_angle.angle, angle_buffer);
         display_text(angle_buffer, SCREEN_WIDTH / 2 - (ANGLE_INFO_LEN * font_big.font_width) / 2, SCREEN_HEIGHT * 3 / 4, &font_big, "Angle");
 
         vTaskDelay(pdMS_TO_TICKS(DISPLAY_DELY));

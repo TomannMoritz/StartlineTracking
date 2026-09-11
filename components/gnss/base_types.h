@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#define LOG_VALUE_f(fd, x) fprintf(fd, "\t%s = %f\n", #x, x);
 #define LOG_VALUE_u8(fd, x) fprintf(fd, "\t%s = %d\n", #x, x);
 #define LOG_VALUE_u32(fd, x) fprintf(fd, "\t%s = %ld\n", #x, x);
 #define LOG_VALUE_ASCII(fd, x) fprintf(fd, "\t%s = %c\n", #x, x);
@@ -108,15 +109,13 @@ typedef struct {
 
 typedef struct {
     uint8_t is_valid;
-    uint8_t integer_value;
-    uint32_t decimal_value;
-} Speed_Knots;
+    float value;
+} SpeedKnots;
 
 
 typedef struct {
     uint8_t is_valid;
-    uint8_t integer_value;
-    uint8_t decimal_value;
+    float value;
 } TrackAngle;
 
 
@@ -160,7 +159,7 @@ void parse_utc_time(UTC_Time *utc_time, ASCII_DATA *data);
 void parse_av_status(AV_Status *status, ASCII_DATA *data);
 void parse_latitude(Latitude *latitude, ASCII_DATA *data);
 void parse_longitude(Longitude *longitude, ASCII_DATA *data);
-void parse_speed_knots(Speed_Knots *speed, ASCII_DATA *data);
+void parse_speed_knots(SpeedKnots *speed, ASCII_DATA *data);
 void parse_track_angle(TrackAngle *angle, ASCII_DATA *data);
 void parse_nmea_date(NMEA_Date *date, ASCII_DATA *data);
 void parse_magnetic_variation(ASCII_DATA *data);
@@ -175,7 +174,7 @@ void log_utc_time(FILE *log_fd, UTC_Time *time);
 void log_av_status(FILE *log_fd, AV_Status *status);
 void log_latitude(FILE *log_fd, Latitude *latitude);
 void log_longitude(FILE *log_fd, Longitude *longitude);
-void log_speed_knots(FILE *log_fd, Speed_Knots *speed);
+void log_speed_knots(FILE *log_fd, SpeedKnots *speed);
 void log_track_angle(FILE *log_fd, TrackAngle *angle);
 void log_nmea_date(FILE *log_fd, NMEA_Date *date);
 void log_position_mode(FILE *log_fd, PosMode *pos_mode);

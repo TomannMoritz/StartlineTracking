@@ -11,11 +11,24 @@ typedef struct {
 
 
 typedef struct {
+    uint8_t is_valid;
+    SpeedKnots speed;
+    TrackAngle angle;
+} SpeedAngle;
+
+
+typedef struct {
     UTC_Time utc_time;
     Coordinate coordinate;
-    Speed_Knots speed;
-    TrackAngle angle;
+    SpeedAngle speed_angle;
 } TrackingData;
+
+
+//--------------------------------------------------
+typedef struct {
+    float x;
+    float y;
+} SpeedAngleVector;
 
 
 //--------------------------------------------------
@@ -35,6 +48,7 @@ extern RingBuffer tracking_ring_buffer;
 
 //--------------------------------------------------
 void create_coordinate(Coordinate *coordinate, Latitude *latitude, Longitude *longitude);
+void create_speed_angle(SpeedAngle *speed_angle, SpeedKnots *speed, TrackAngle *angle);
 void ring_buffer_insert(RingBuffer *ring_buffer, TrackingData *track_data);
 
 Coordinate get_average_coordinate(RingBuffer *ring_buffer, uint32_t length);
@@ -45,5 +59,6 @@ void calculate_average_tracking_data(RingBuffer *ring_buffer, uint32_t length, T
 // Logging
 //--------------------------------------------------
 void log_coordinate(FILE *log_fd, Coordinate *coordinate);
+void log_speed_angle(FILE *log_fd, SpeedAngle *speed_angle);
 void log_tracking_data(FILE *log_fd, TrackingData *tracking_data);
 void log_ring_buffer(FILE *log_fd, RingBuffer *ring_buffer);

@@ -13,7 +13,7 @@ typedef struct {
     // North/South
     Longitude longitude;
     // East/West
-    Speed_Knots speed;
+    SpeedKnots speed;
     TrackAngle angle;
     NMEA_Date date;
     // Magnetic variation

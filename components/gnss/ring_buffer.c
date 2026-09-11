@@ -12,6 +12,14 @@ void create_coordinate(Coordinate *coordinate, Latitude *latitude, Longitude *lo
 }
 
 
+void create_speed_angle(SpeedAngle *speed_angle, SpeedKnots *speed, TrackAngle *angle){
+    speed_angle->is_valid = speed->is_valid && angle->is_valid;
+
+    speed_angle->speed = *speed;
+    speed_angle->angle = *angle;
+}
+
+
 void ring_buffer_insert(RingBuffer *ring_buffer, TrackingData *tracking_data){
     if (ring_buffer->start_position == 0){
         ring_buffer->start_position = RING_BUFFER_SIZE;
@@ -81,13 +89,18 @@ void log_coordinate(FILE *log_fd, Coordinate *coordinate){
 }
 
 
+void log_speed_angle(FILE *log_fd, SpeedAngle *speed_angle){
+    LOG_VALUE_u8(log_fd, speed_angle->is_valid);
+    log_speed_knots(log_fd, &speed_angle->speed);
+    log_track_angle(log_fd, &speed_angle->angle);
+}
+
+
 void log_tracking_data(FILE *log_fd, TrackingData *tracking_data){
     log_utc_time(log_fd, &tracking_data->utc_time);
 
     log_coordinate(log_fd, &tracking_data->coordinate);
-
-    log_speed_knots(log_fd, &tracking_data->speed);
-    log_track_angle(log_fd, &tracking_data->angle);
+    log_speed_angle(log_fd, &tracking_data->speed_angle);
 }
 
 
