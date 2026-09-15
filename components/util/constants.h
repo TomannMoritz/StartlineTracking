@@ -2,9 +2,16 @@
 #include <stdint.h>
 
 
+#define TEST_RANGE_INT(value, min, max) do {        \
+    TEST_ASSERT_GREATER_OR_EQUAL_INT(min, value);   \
+    TEST_ASSERT_LESS_OR_EQUAL_INT(max, value);      \
+} while(0)
+
+
 //--------------------------------------------------
 extern const double PI;
 extern const double DEG_HALF_CIRCLE;
+extern const double DEG_FULL_CIRCLE;
 
 
 //--------------------------------------------------

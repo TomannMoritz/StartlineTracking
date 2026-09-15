@@ -7,6 +7,13 @@ const uint8_t NORTH_OFFSET_DEG = 90;
 
 
 //--------------------------------------------------
+float positive_degree(float degree){
+    float modulo = fmod(degree, DEG_FULL_CIRCLE);
+    return sign_of_float(degree) >= 0 ? modulo : fmod(DEG_FULL_CIRCLE + modulo, DEG_FULL_CIRCLE);
+}
+
+
+//--------------------------------------------------
 float compass_to_degree(float compass){
     return (compass - NORTH_OFFSET_DEG) * -1;
 }

@@ -7,6 +7,10 @@ typedef struct {
 
 
 //--------------------------------------------------
+float positive_degree(float degree);
+
+
+//--------------------------------------------------
 float compass_to_degree(float compass);
 float degree_to_compass(float degree);
 

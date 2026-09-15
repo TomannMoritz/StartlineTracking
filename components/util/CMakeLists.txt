@@ -4,5 +4,7 @@ idf_component_register(
         "constants.c"
     INCLUDE_DIRS
         "."
+        "test"
+    REQUIRES unity
     )
 

@@ -13,7 +13,10 @@
 !CMakeLists.txt
 
 !main/
+!test/
 !components/
 !components/gnss/
 !components/display/
 !components/util/
+
+!components/util/test/
