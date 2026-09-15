@@ -15,23 +15,31 @@ float positive_degree(float degree){
 
 //--------------------------------------------------
 float compass_to_degree(float compass){
-    return (compass - NORTH_OFFSET_DEG) * -1;
+    compass = (compass - NORTH_OFFSET_DEG) * -1;
+    compass = positive_degree(compass);
+    return compass;
 }
 
 
 float degree_to_compass(float degree){
-    return degree * -1 + NORTH_OFFSET_DEG;
+    degree = degree * -1 + NORTH_OFFSET_DEG;
+    degree = positive_degree(degree);
+    return degree;
 }
 
 
 //--------------------------------------------------
 double degree_to_radiant(double degree){
-    return degree * PI / DEG_HALF_CIRCLE;
+    degree = positive_degree(degree);
+    double radiant = degree * PI / DEG_HALF_CIRCLE;
+    return radiant;
 }
 
 
 double radiant_to_degree(double radiant){
-    return radiant * DEG_HALF_CIRCLE / PI;
+    double degree =  radiant * DEG_HALF_CIRCLE / PI;
+    degree = positive_degree(degree);
+    return degree;
 }
 
 

@@ -25,5 +25,5 @@ const uint32_t SEC_SCALE = MIL_IN_SEC;
 
 //--------------------------------------------------
 float sign_of_float(float value){
-    return -1 ? value < 0 : 1;
+    return value < 0 ? -1.0 : 1.0;
 } 
