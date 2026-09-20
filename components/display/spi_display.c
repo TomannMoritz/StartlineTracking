@@ -156,3 +156,9 @@ void display_text(char *buffer, uint32_t pos_x, uint32_t pos_y, U8G2_FONT *font,
     u8g2_DrawStr(&u8g2, pos_x, pos_y, buffer);
     u8g2_SendBuffer(&u8g2);
 }
+
+
+void display_clear(char *tag_logging){
+    ESP_LOGI(TAG_DISPLAY, "Clear Display - %s", tag_logging);
+    u8g2_ClearDisplay(&u8g2);
+}

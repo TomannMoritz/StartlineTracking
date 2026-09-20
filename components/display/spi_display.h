@@ -23,3 +23,4 @@ extern U8G2_FONT font_big;
 //--------------------------------------------------
 void init_u8g2();
 void display_text(char *buffer, uint32_t pos_x, uint32_t pos_y, U8G2_FONT *font, char *tag_logging);
+void display_clear(char *tag_logging);
