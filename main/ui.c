@@ -84,12 +84,13 @@ void set_speed(SpeedKnots *speed, char *buffer){
     }
 
     int integer_value = (int)speed->value;
-    int decimal_value = (int)speed->value * BASE_100 % BASE_100;
+    int decimal_value = (int)(speed->value * BASE_100) % BASE_100;
+
     sprintf(buffer, "%d%d.%d%dkn",
             (int)(integer_value / BASE_10 % BASE_10),
             (int)(integer_value % BASE_10),
-            (int)(decimal_value / BASE_10_000 % BASE_10),
-            (int)(decimal_value % BASE_10_000 / BASE_1000 % BASE_10));
+            (int)(decimal_value / BASE_10 % BASE_10),
+            (int)(decimal_value % BASE_10));
 }
 
 
@@ -103,7 +104,7 @@ void set_angle(TrackAngle *angle, char *buffer){
     }
 
     int integer_value = (int)angle->value;
-    int decimal_value = (int)angle->value * BASE_100 % BASE_100;
+    int decimal_value = (int)(angle->value * BASE_100) % BASE_100;
     sprintf(buffer, "%d%d%d.%d%dDeg",
             (int)(integer_value / BASE_100 % BASE_10),
             (int)(integer_value / BASE_10 % BASE_10),
@@ -119,7 +120,7 @@ void display_pre_start(){
 
     // Countdown
     set_countdown(&countdown_timer, countdown_buffer);
-    display_text(countdown_buffer, SCREEN_WIDTH / 2 - (COUNTDOWN_INFO_LEN * font_big.font_width) / 2, SCREEN_HEIGHT / 4, &font_big, "Countdown");
+    display_text(countdown_buffer, SCREEN_WIDTH / 2 - (COUNTDOWN_INFO_LEN * font_big.font_width) / 2, SCREEN_HEIGHT / 4 + HEADLINE_OFFSET, &font_big, "Countdown");
 }
 
 
