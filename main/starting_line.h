@@ -10,6 +10,8 @@ typedef struct {
     Coordinate pin_end;
 } StartingLine;
 
+extern StartingLine starting_line;
+
 
 //--------------------------------------------------
 void init_starting_line();

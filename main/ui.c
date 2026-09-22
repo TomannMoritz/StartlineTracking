@@ -6,6 +6,7 @@
 #include "countdown.h"
 #include "ring_buffer.h"
 #include "gps_util.h"
+#include "starting_line.h"
 
 #include "constants.h"
 
@@ -13,6 +14,9 @@
 static const char *TAG_UI = "[UI]";
 const uint32_t DISPLAY_DELAY = 10;
 const uint32_t HEADLINE_OFFSET = 8;
+
+const char INFO_YES = 'Y';
+const char INFO_NO = 'N';
 
 enum DISPLAY_VIEW_STATE { PRE_START, POST_START };
 enum DISPLAY_VIEW_STATE curr_view = PRE_START;
@@ -48,13 +52,14 @@ enum { GNSS_INFO_LEN = 6 };
 char gnss_info_buffer[GNSS_INFO_LEN + NULL_TERMINATOR_BYTES];
 
 void set_gnss_info(Coordinate *coordinate, char *buffer){
-    const char *FORMAT_INFO = "GNSS";
-    if (coordinate->is_valid == FALSE){
-        sprintf(buffer, "%s:N", FORMAT_INFO);
-        return;
+    const char *FORMAT_INFO = "GNSS:%c";
+    char info = INFO_YES;
+
+    if (!coordinate->is_valid){
+        info = INFO_NO;
     }
 
-    sprintf(buffer, "%s:Y", FORMAT_INFO);
+    sprintf(buffer, FORMAT_INFO, info);
 }
 
 
@@ -114,6 +119,54 @@ void set_angle(TrackAngle *angle, char *buffer){
 }
 
 
+enum { STARTING_LINE_LENGTH_BYTES = 4 };
+char starting_line_length_buffer[STARTING_LINE_LENGTH_BYTES + NULL_TERMINATOR_BYTES];
+
+void set_starting_line_length(StartingLine *starting_line, char *buffer){
+    if (!starting_line->committee_boat.is_valid || !starting_line->pin_end.is_valid){
+        sprintf(buffer, "---M");
+        return;
+    }
+
+    double distance_km = calculate_haversine_distance(&starting_line->committee_boat, &starting_line->pin_end);
+    uint32_t starting_line_length = (uint32_t)(distance_km * BASE_1000);
+    sprintf(buffer, "%d%d%dm",
+            (int)(starting_line_length / BASE_100 % BASE_10),
+            (int)(starting_line_length / BASE_10 % BASE_10),
+            (int)(starting_line_length % BASE_10));
+}
+
+
+enum { STARTING_LINE_COMMITTEE_BOAT_BYTES = 6 };
+char starting_line_committee_boat_buffer[STARTING_LINE_COMMITTEE_BOAT_BYTES + NULL_TERMINATOR_BYTES];
+
+void set_committee_boat_info(StartingLine *starting_line, char *buffer){
+    const char *FORMAT_INFO = "Boat:%c";
+    char info = INFO_YES;
+
+    if (!starting_line->committee_boat.is_valid){
+        info = INFO_NO;
+    }
+
+    sprintf(buffer, FORMAT_INFO, info);
+}
+
+
+enum { STARTING_LINE_PIN_END_BYTES = 5 };
+char starting_line_pin_end_buffer[STARTING_LINE_PIN_END_BYTES + NULL_TERMINATOR_BYTES];
+
+void set_pin_end_info(StartingLine *starting_line, char *buffer){
+    const char *FORMAT_INFO = "Pin:%c";
+    char info = INFO_YES;
+
+    if (!starting_line->pin_end.is_valid){
+        info = INFO_NO;
+    }
+
+    sprintf(buffer, FORMAT_INFO, info);
+}
+
+
 //--------------------------------------------------
 void display_pre_start(){
     ESP_LOGI(TAG_UI, "Update Display (Pre Start)");
@@ -121,6 +174,18 @@ void display_pre_start(){
     // Countdown
     set_countdown(&countdown_timer, countdown_buffer);
     display_text(countdown_buffer, SCREEN_WIDTH / 2 - (COUNTDOWN_INFO_LEN * font_big.font_width) / 2, SCREEN_HEIGHT / 4 + HEADLINE_OFFSET, &font_big, "Countdown");
+
+
+    // TODO: Starting Line Distance (Distance to line)
+
+    // Starting Line Length
+    set_starting_line_length(&starting_line, starting_line_length_buffer);
+    set_committee_boat_info(&starting_line, starting_line_committee_boat_buffer);
+    set_pin_end_info(&starting_line, starting_line_pin_end_buffer);
+
+    display_text(starting_line_length_buffer, SCREEN_WIDTH / 2 - (STARTING_LINE_LENGTH_BYTES * font_small.font_width) / 2, SCREEN_HEIGHT * 3 / 4, &font_small, "Starting Line Length");
+    display_text(starting_line_committee_boat_buffer, 0, SCREEN_HEIGHT * 3 / 4, &font_small, "Starting Line Committee Boat");
+    display_text(starting_line_pin_end_buffer, SCREEN_WIDTH - (STARTING_LINE_PIN_END_BYTES * font_small.font_width), SCREEN_HEIGHT * 3 / 4, &font_small, "Starting Line Pin End");
 }
 
 
