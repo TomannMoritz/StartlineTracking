@@ -4,6 +4,7 @@
 
 const uint8_t ASCII_START = '$';
 const uint8_t ASCII_SEPARATOR = ',';
+const uint8_t ASCII_FLOATING_POINT = '.';
 const uint8_t ASCII_ZERO = '0';
 
 const uint8_t ACTIVE_STATUS = 'A';
@@ -24,6 +25,18 @@ uint8_t ascii_to_number(uint8_t value){
 }
 
 
+uint32_t uint32_t_pow(uint32_t base, uint32_t exponent){
+    if(exponent == 0){ return 0; }
+    uint32_t result = 1;
+
+    for(uint32_t i = 0; i < exponent; i++){
+        result *= base;
+    }
+
+    return result;
+}
+
+
 void sign_of_i32(int32_t number, int8_t *sign, uint32_t *value){
     uint8_t is_positive = number >= 0;
     *sign = (is_positive) ? 1 : -1;
@@ -32,6 +45,43 @@ void sign_of_i32(int32_t number, int8_t *sign, uint32_t *value){
 }
 
 
+NumericResult get_parsed_numeric(ASCII_DATA *data){
+    NumericResult result = { .is_valid = FALSE, .numeric = 0};
+
+    uint8_t floating_point_position = 0;
+
+    while(data->data[data->offset] != ASCII_SEPARATOR){
+        char value = data->data[data->offset];
+        if(value == ASCII_FLOATING_POINT){
+            // NOTE: pre-increment to start counting floating point positions with the first digit
+            floating_point_position = ++data->offset;
+            continue;
+        }
+
+        uint8_t numeric = ascii_to_number(value);
+        uint8_t out_of_bounds = numeric > BASE_10;
+        if(out_of_bounds){ return result; }
+
+        result.numeric *= BASE_10;
+        result.numeric += numeric;
+
+        data->offset++;
+    }
+
+    if(floating_point_position != 0){
+        int number_floating_positions = data->offset - floating_point_position;
+        uint32_t divider = uint32_t_pow(BASE_10, number_floating_positions);
+        
+        if(divider == 0){ return result; }
+        result.numeric /= divider;
+    }
+
+    result.is_valid = TRUE;
+    return result;
+}
+
+
+//--------------------------------------------------
 int32_t geographical_position_to_number(GeographicalPosition *position){
     int32_t result = 0
         + position->degrees * DEG_SCALE
@@ -285,42 +335,22 @@ void parse_longitude(Longitude *longitude, ASCII_DATA *data){
 
 void parse_speed_knots(SpeedKnots *speed, ASCII_DATA *data){
     RETURN_EMPTY_FIELD(data);
+    NumericResult result = get_parsed_numeric(data);
 
-    speed->value = ascii_to_number(data->data[data->offset]);
-    data->offset++;
+    speed->is_valid = result.is_valid;
+    speed->value = result.numeric;
 
-    // separator at position 1
-    data->offset++;
-
-    speed->value += ascii_to_number(data->data[data->offset]) / (float)BASE_10;
-    data->offset++;
-    speed->value += ascii_to_number(data->data[data->offset]) / (float)BASE_100;
-    data->offset++;
-    speed->value += ascii_to_number(data->data[data->offset]) / (float)BASE_1000;
-    data->offset++;
-
-    speed->is_valid = TRUE;
     data->offset++;
 }
 
 
 void parse_track_angle(TrackAngle *angle, ASCII_DATA *data){
     RETURN_EMPTY_FIELD(data);
+    NumericResult result = get_parsed_numeric(data);
 
-    angle->value = ascii_to_number(data->data[data->offset]) * BASE_10;
-    data->offset++;
-    angle->value += ascii_to_number(data->data[data->offset]);
-    data->offset++;
+    angle->is_valid = result.is_valid;
+    angle->value = result.numeric;
 
-    // separator at position 2
-    data->offset++;
-
-    angle->value += ascii_to_number(data->data[data->offset]) / (float)BASE_10;
-    data->offset++;
-    angle->value += ascii_to_number(data->data[data->offset]) / (float)BASE_100;
-    data->offset++;
-
-    angle->is_valid = TRUE;
     data->offset++;
 }
 

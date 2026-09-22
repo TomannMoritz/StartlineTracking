@@ -30,6 +30,12 @@ typedef struct {
 
 typedef struct {
     uint8_t is_valid;
+    float numeric;
+} NumericResult;
+
+
+typedef struct {
+    uint8_t is_valid;
     int8_t sign;
     uint8_t degrees;
     uint8_t minutes;
