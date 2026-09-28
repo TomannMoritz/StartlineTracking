@@ -184,8 +184,8 @@ void display_pre_start(){
     set_pin_end_info(&starting_line, starting_line_pin_end_buffer);
 
     display_text(starting_line_length_buffer, SCREEN_WIDTH / 2 - (STARTING_LINE_LENGTH_BYTES * font_small.font_width) / 2, SCREEN_HEIGHT * 3 / 4, &font_small, "Starting Line Length");
-    display_text(starting_line_committee_boat_buffer, 0, SCREEN_HEIGHT * 3 / 4, &font_small, "Starting Line Committee Boat");
-    display_text(starting_line_pin_end_buffer, SCREEN_WIDTH - (STARTING_LINE_PIN_END_BYTES * font_small.font_width), SCREEN_HEIGHT * 3 / 4, &font_small, "Starting Line Pin End");
+    display_text(starting_line_pin_end_buffer, 0, SCREEN_HEIGHT * 3 / 4, &font_small, "Starting Line Pin End");
+    display_text(starting_line_committee_boat_buffer, SCREEN_WIDTH - (STARTING_LINE_COMMITTEE_BOAT_BYTES * font_small.font_width), SCREEN_HEIGHT * 3 / 4, &font_small, "Starting Line Committee Boat");
 }
 
 
