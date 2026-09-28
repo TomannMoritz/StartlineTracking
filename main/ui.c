@@ -212,9 +212,6 @@ void display_task(void *){
 
     while (true){
         ESP_LOGI(TAG_UI, "Update Display");
-        if (countdown_timer.seconds <= 0){
-            curr_view = PRE_START;
-        }
 
         // TrackingData (GNSS)
         TrackingData curr_data = tracking_ring_buffer.tracking_data[tracking_ring_buffer.start_position];
@@ -240,6 +237,11 @@ void display_task(void *){
 
             case POST_START:
                 display_post_start(&curr_data);
+
+                if (countdown_timer.seconds <= 0){
+                    curr_view = PRE_START;
+                    display_clear("POST START");
+                }
                 break;
 
             default:
